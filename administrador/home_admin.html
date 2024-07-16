@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador - Sistema Médico</title>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            background-color: #1e90ff;
+            padding: 15px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .header button {
+            background-color: #1e90ff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            left: 15px;
+            top: 15px;
+        }
+
+        .header button:hover {
+            background-color: #4169e1;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #1e90ff;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-group button {
+            background-color: #1e90ff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #4169e1;
+        }
+
+        .product-list {
+            margin-top: 20px;
+        }
+
+        .product-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <button onclick="window.location.href='../login/login.html'">Volver al Login</button>
+        <h1>Administrador - Sistema Médico</h1>
+    </div>
+
+    <div class="container">
+        <div class="section" id="tiendaSection">
+            <h2>Tienda</h2>
+            <button onclick="openModal('tiendaModal')">Agregar Producto a la Tienda</button>
+            <div class="product-list" id="tiendaProductos">
+
+            </div>
+        </div>
+
+        <div class="section" id="farmaciaSection">
+            <h2>Farmacia</h2>
+            <button onclick="openModal('farmaciaModal')">Agregar Producto a la Farmacia</button>
+            <div class="product-list" id="farmaciaProductos">
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="tiendaModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('tiendaModal')">&times;</span>
+            <h2>Agregar Producto a la Tienda</h2>
+            <div class="form-group">
+                <label for="tiendaNombre">Nombre del Producto:</label>
+                <input type="text" id="tiendaNombre">
+            </div>
+            <div class="form-group">
+                <label for="tiendaPrecio">Precio:</label>
+                <input type="text" id="tiendaPrecio">
+            </div>
+            <div class="form-group">
+                <label for="tiendaRetiro">Retiro en Tienda:</label>
+                <input type="text" id="tiendaRetiro">
+            </div>
+            <div class="form-group">
+                <button onclick="agregarProducto('tienda')">Agregar Producto</button>
+            </div>
+        </div>
+    </div>
+    <div id="farmaciaModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('farmaciaModal')">&times;</span>
+            <h2>Agregar Producto a la Farmacia</h2>
+            <div class="form-group">
+                <label for="farmaciaNombre">Nombre del Producto:</label>
+                <input type="text" id="farmaciaNombre">
+            </div>
+            <div class="form-group">
+                <label for="farmaciaPrecio">Precio:</label>
+                <input type="text" id="farmaciaPrecio">
+            </div>
+            <div class="form-group">
+                <label for="farmaciaRetiro">Retiro en Farmacia:</label>
+                <input type="text" id="farmaciaRetiro">
+            </div>
+            <div class="form-group">
+                <button onclick="agregarProducto('farmacia')">Agregar Producto</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function agregarProducto(tipo) {
+            let nombre, precio, retiro, formId;
+            if (tipo === 'tienda') {
+                nombre = document.getElementById('tiendaNombre').value;
+                precio = document.getElementById('tiendaPrecio').value;
+                retiro = document.getElementById('tiendaRetiro').value;
+                document.getElementById('tiendaProductos').innerHTML += `
+                    <div class="product-item">
+                        <p><strong>Nombre:</strong> ${nombre}</p>
+                        <p><strong>Precio:</strong> ${precio}</p>
+                        <p><strong>Retiro en Tienda:</strong> ${retiro}</p>
+                    </div>
+                `;
+                closeModal('tiendaModal');
+                document.getElementById('tiendaNombre').value = '';
+                document.getElementById('tiendaPrecio').value = '';
+                document.getElementById('tiendaRetiro').value = '';
+            } else if (tipo === 'farmacia') {
+                nombre = document.getElementById('farmaciaNombre').value;
+                precio = document.getElementById('farmaciaPrecio').value;
+                retiro = document.getElementById('farmaciaRetiro').value;
+                document.getElementById('farmaciaProductos').innerHTML += `
+                    <div class="product-item">
+                        <p><strong>Nombre:</strong> ${nombre}</p>
+                        <p><strong>Precio:</strong> ${precio}</p>
+                        <p><strong>Retiro en Farmacia:</strong> ${retiro}</p>
+                    </div>
+                `;
+                closeModal('farmaciaModal');
+                document.getElementById('farmaciaNombre').value = '';
+                document.getElementById('farmaciaPrecio').value = '';
+                document.getElementById('farmaciaRetiro').value = '';
+            }
+        }
+
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>
